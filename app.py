@@ -213,14 +213,11 @@ with gr.Blocks(theme=gr.themes.Base(),
             back_btn = gr.Button("← Back", elem_classes=["back-button"])
 
             gr.HTML(f"""<div class="header-settings">Settings</div>""")
-        
-
-
+      
         with gr.Column(elem_classes=["settings-container"]):
             with gr.Group(elem_classes=["settings-panel"]):
                 gr.HTML("""<div>Please upload the latest version of the Human Resources policies and procedures.</div>""")
                 gr.File(label="Upload File")
-
     
     # Set up navigation between pages using the actual buttons
     settings_btn.click(show_settings_page, inputs=[], outputs=[settings_page, main_app])

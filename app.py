@@ -37,7 +37,7 @@ with gr.Blocks(theme=gr.themes.Base(),
                .chat-icon {{color: {button_blue}; margin-right: 10px;}}
                .settings-icon {{color: {text_color}; font-size: 24px; cursor: pointer; transition: color 0.3s;}}
                .settings-icon:hover {{color: {button_blue};}}
-               .section-title {{color: {text_color}; background-color: {light_background}; padding: 10px; margin: 10px; font-size: 20px; margin-bottom: 15px;}}             
+               .section-title {{color: {text_color}; background-color: {dark_background}; padding: 10px; margin: 10px; font-size: 20px; margin-bottom: 15px;}}             
                .history-item {{padding: 8px 0; color: {text_color};}}
                .question-button {{background-color: {card_bg}; color: {text_color}; text-align: left; padding: 12px; 
                                  border-radius: 8px; margin-bottom: 10px; border: none;}}    

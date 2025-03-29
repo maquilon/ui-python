@@ -1,7 +1,9 @@
 import gradio as gr
 
 def dummy_function(*args):
+    # @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
     # This function would handle the actual HR assistant functionality
+    # @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
     return "This is where the HR assistant response would appear."
 
 def show_settings_page():
@@ -20,20 +22,22 @@ card_bg = "#374151"
 text_color = "#FFFFFF"
 muted_text = "#A0A0A0"
 icon_blue = "#4C82FB"
+BLUE_CIRCLE_ICON = '<span style="display: inline-block; width: 18px; height: 18px; border: 2px solid #4C82FB; border-radius: 50%; vertical-align: middle; margin-right: 5px;"></span>'
+
 
 with gr.Blocks(theme=gr.themes.Base(), 
                css=f"""
                .gradio-container {{background-color: {dark_background} !important;}}
-               .main-panel {{background-color: {light_background}, padding-right: 15px; margin-right: 15px;}}
+               .main-panel {{padding-right: 15px; margin-right: 15px; background-color: {dark_background}; }}
                .left-panel {{background-color: {light_background}; border-radius: 10px; padding: 10px; margin: 15px;}}
                .example-questions {{background-color: {light_background}; border-radius: 10px; padding: 15px; margin-bottom: 20px; }}
-               .full-width-header {{background-color: {light_background}; padding: 15px; width: 100%; display: flex; justify-content: space-between; }}
+               .full-width-header {{background-color: {light_background}; padding: 15px; width: 100%; display: flex; justify-content: space-between; align-items: center;}}
                .header {{color: {text_color}; display: flex; align-items: center; font-size: 24px; font-weight: bold;}}
                .header-icons {{display: flex; align-items: center;}}
                .chat-icon {{color: {button_blue}; margin-right: 10px;}}
                .settings-icon {{color: {text_color}; font-size: 24px; cursor: pointer; transition: color 0.3s;}}
                .settings-icon:hover {{color: {button_blue};}}
-               .section-title {{color: {text_color}; background-color: {light_background}; font-size: 20px; margin-bottom: 15px;}}             
+               .section-title {{color: {text_color}; background-color: {light_background}; padding: 10px; margin: 10px; font-size: 20px; margin-bottom: 15px;}}             
                .history-item {{padding: 8px 0; color: {text_color};}}
                .question-button {{background-color: {card_bg}; color: {text_color}; text-align: left; padding: 12px; 
                                  border-radius: 8px; margin-bottom: 10px; border: none;}}    
@@ -47,42 +51,31 @@ with gr.Blocks(theme=gr.themes.Base(),
                .capability-column {{  padding: 0 5px; }}
                .capability-column-divider {{ padding: 0 10px }}
                
-               .footer-bar {{background-color: {light_background}; padding: 10px; border-radius: 8px;}}
+               .footer-bar {{background-color: {light_background}; padding: 10px; border-radius: 8px; margin-top: 30px;}}
                .send-button {{background-color: {button_blue}; color: white; border-radius: 8px;}}
                .back-button {{background-color: {button_blue}; color: white; border-radius: 8px; padding: 6px 12px; margin-bottom: 20px;}}
                .settings-panel {{background-color: {card_bg}; border-radius: 10px; padding: 20px; margin: 15px;}}
                .settings-container {{background-color: {dark_background}; padding: 20px;}}
+               .settings-btn {{background: none; border: none; color: {text_color}; font-size: 24px; 
+                             cursor: pointer; transition: color 0.3s; padding: 0; margin: 0;}}
+               .settings-btn:hover {{color: {button_blue};}}
                """) as demo:
     
-    # Create two pages: main app and settings
+    #  Two pages: main app and settings
     main_app = gr.Group(visible=True)
     settings_page = gr.Group(visible=False)
     
     # Main application
     with main_app:
-        # Full-width header with added settings icon
         with gr.Row(elem_classes=["full-width-header"]):
-            gr.HTML(f"""<div class="header"><span class="chat-icon">💬</span> GuideWell HR Assistant</div>""")
-            # Create a clickable button that looks like an icon
-            settings_btn = gr.Button("⚙️", elem_id="settings-icon")
+            # Create the header with title and settings button
+            with gr.Column(scale=4):
+                gr.HTML(f"""<div class="header"><span class="chat-icon">💬</span> GuideWell HR Assistant</div>""")
             
-            # Style the button to look like an icon
-            gr.HTML("""
-            <style>
-            #settings-icon {
-                background: none;
-                border: none;
-                font-size: 24px;
-                padding: 0;
-                cursor: pointer;
-                box-shadow: none;
-            }
-            #settings-icon:hover {
-                color: #4C82FB;
-            }
-            </style>
-            """)
-        
+            # Instead of HTML/JS settings icon, use a gradio Button
+            with gr.Column(scale=1):
+                settings_btn = gr.Button("⚙️", elem_classes=["settings-btn"])
+            
         with gr.Row(elem_id="container"):
             # Left panel - Chat History
             with gr.Column(scale=1, elem_classes=["left-panel"]):
@@ -95,61 +88,87 @@ with gr.Blocks(theme=gr.themes.Base(),
             
             # Right panel - Main content
             with gr.Column(scale=3, elem_classes=["main-panel"]):
-                # Example Questions Section
-                with gr.Row():
-                    gr.HTML(f"""<div class="section-title">Example Questions</div>""")
 
-                with gr.Group(elem_classes=["example-questions"]):                   
-                    with gr.Row():
-                        with gr.Column(scale=1):
-                            gr.Button("What is the policy for requesting paid time off?", elem_classes=["question-button"])
-                            gr.Button("How do I update my direct deposit information?", elem_classes=["question-button"])
-                        
-                        with gr.Column(scale=1):
-                            gr.Button("Could you explain the jury duty and court appearances policy?", elem_classes=["question-button"])
-                            gr.Button("What are the steps for performance review submissions?", elem_classes=["question-button"])
-                
-                # Capabilities Section
-                gr.HTML(f"""<div class="section-title">Capabilities</div>""")
-                            
+                # Example Questions Section
+                gr.HTML(f"""<div class="section-title">Example Questions</div>""")
                 with gr.Group(elem_classes=["capabilities"]):                   
+
                     with gr.Row(elem_classes=["capability-row"]):
                         with gr.Column(scale=1,elem_classes=["capability-column"]):
                             with gr.Group(elem_classes=["capability-card"]):
                                 gr.HTML("""
                                 <div>
-                                    <div class="capability-title">👥 Employee Self-Service</div>
-                                    <div class="capability-subtitle">Manage your HR tasks efficiently</div>
+                                    <div class="capability-title">What is the policy for requesting paid time off?</div>
                                 </div>
                                 """, elem_classes=["capability-group"])
                             
                             with gr.Group(elem_classes=["capability-card"]):
                                 gr.HTML("""
                                 <div>
-                                    <div class="capability-title">🛡️ Security & Compliance</div>
+                                    <div class="capability-title">How do I update my direct deposit information?</div>
+                                </div>
+                                """, elem_classes=["capability-group"])
+
+                        with gr.Column(scale=1,elem_classes=["capability-column"]):
+                            with gr.Group(elem_classes=["capability-card"]):
+                                gr.HTML("""
+                                    <div>
+                                        <div class="capability-title">Explain the jury duty and court appearances policy?</div>
+                                    </div>
+                                """, elem_classes=["capability-group"])
+                            
+                            with gr.Group(elem_classes=["capability-card"]):
+                                gr.HTML("""
+                                <div>
+                                    <div class="capability-title">What are the steps for performance review submissions?</div>
+                                </div>
+                                """,elem_classes=["capability-group"])
+
+                
+                            
+                # Capabilities Section
+                gr.HTML(f"""<div class="section-title">Capabilities</div>""")
+                with gr.Group(elem_classes=["capabilities"]):                   
+
+                    with gr.Row(elem_classes=["capability-row"]):
+                        with gr.Column(scale=1,elem_classes=["capability-column"]):
+                            with gr.Group(elem_classes=["capability-card"]):
+                                gr.HTML(f"""
+                                <div>
+                                    <div class="capability-title"> 
+                                        {BLUE_CIRCLE_ICON}Employee Self-Service</div>
+                                    <div class="capability-subtitle">Manage your HR tasks efficiently</div>
+                                </div>
+                                """, elem_classes=["capability-group"])
+                            
+                            with gr.Group(elem_classes=["capability-card"]):
+                                gr.HTML(f"""
+                                <div>
+                                    <div class="capability-title">{BLUE_CIRCLE_ICON} Security & Compliance</div>
                                     <div class="capability-subtitle">Stay informed about compliance requirements</div>
                                 </div>
                                 """, elem_classes=["capability-group"])
 
-                        with gr.Row(elem_classes=["capability-row"]):   
-                            with gr.Column(scale=1,elem_classes=["capability-column"]):
-                                with gr.Group(elem_classes=["capability-card"]):
-                                    gr.HTML("""
-                                        <div>
-                                            <div class="capability-title">📋 HR Policy & Procedure</div>
-                                            <div class="capability-subtitle">Get instant answers about company policies</div>
-                                        </div>
-                                    """, elem_classes=["capability-group"])
-                                
-                                with gr.Group(elem_classes=["capability-card"]):
-                                    gr.HTML("""
+                        with gr.Column(scale=1,elem_classes=["capability-column"]):
+                            with gr.Group(elem_classes=["capability-card"]):
+                                gr.HTML(f"""
                                     <div>
-                                        <div class="capability-title">💲 Benefits & Compensation</div>
-                                        <div class="capability-subtitle">Learn about your benefits package</div>
+                                        <div class="capability-title">{BLUE_CIRCLE_ICON} HR Policy & Procedure</div>
+                                        <div class="capability-subtitle">Get instant answers about company policies</div>
                                     </div>
-                                    """,elem_classes=["capability-group"])
-                
+                                """, elem_classes=["capability-group"])
+                            
+                            with gr.Group(elem_classes=["capability-card"]):
+                                gr.HTML(f"""
+                                <div>
+                                    <div class="capability-title">{BLUE_CIRCLE_ICON} Benefits & Compensation</div>
+                                    <div class="capability-subtitle">Learn about your benefits package</div>
+                                </div>
+                                """,elem_classes=["capability-group"])
+
+                # @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
                 # Input and Chat Area
+                # @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
                 with gr.Row(elem_classes=["footer-bar"]):
                     with gr.Column(scale=20):
                         user_input = gr.Textbox(
@@ -159,14 +178,18 @@ with gr.Blocks(theme=gr.themes.Base(),
                     
                     with gr.Column(scale=1):
                         submit_btn = gr.Button("Send", elem_classes=["send-button"])
-                
                 output = gr.Textbox(label="Response", visible=False)
                 
+                # @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
                 # Connect the components
+                # @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
                 submit_btn.click(dummy_function, inputs=[user_input], outputs=[output])
                 user_input.submit(dummy_function, inputs=[user_input], outputs=[output])
-    
+
+
+    # @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
     # Settings page
+    # @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
     with settings_page:
         with gr.Row(elem_classes=["full-width-header"]):
             back_btn = gr.Button("← Back", elem_classes=["back-button"])
@@ -175,9 +198,9 @@ with gr.Blocks(theme=gr.themes.Base(),
         with gr.Column(elem_classes=["settings-container"]):
             with gr.Group(elem_classes=["settings-panel"]):
                 gr.HTML("""<div class="section-title">Settings</div>""")
-                gr.HTML("""<div>Text</div>""")
+                gr.HTML("""<div>Settings content will go here</div>""")
     
-    # Set up navigation between pages
+    # Set up navigation between pages using the actual buttons
     settings_btn.click(show_settings_page, inputs=[], outputs=[settings_page, main_app])
     back_btn.click(show_main_page, inputs=[], outputs=[settings_page, main_app])
 

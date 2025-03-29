@@ -23,12 +23,10 @@ icon_blue = "#4C82FB"
 
 with gr.Blocks(theme=gr.themes.Base(), 
                css=f"""
-               .container {{background-color: red;}}
                .gradio-container {{background-color: {dark_background} !important;}}
                .main-panel {{background-color: {light_background}, padding-right: 15px; margin-right: 15px;}}
                .left-panel {{background-color: {light_background}; border-radius: 10px; padding: 10px; margin: 15px;}}
                .example-questions {{background-color: {light_background}; border-radius: 10px; padding: 15px; margin-bottom: 20px; }}
-               .capabilities {{background-color: {light_background}; border-radius: 10px; padding: 15px;}}
                .full-width-header {{background-color: {light_background}; padding: 15px; width: 100%; display: flex; justify-content: space-between; }}
                .header {{color: {text_color}; display: flex; align-items: center; font-size: 24px; font-weight: bold;}}
                .header-icons {{display: flex; align-items: center;}}
@@ -38,14 +36,17 @@ with gr.Blocks(theme=gr.themes.Base(),
                .section-title {{color: {text_color}; background-color: {light_background}; font-size: 20px; margin-bottom: 15px;}}             
                .history-item {{padding: 8px 0; color: {text_color};}}
                .question-button {{background-color: {card_bg}; color: {text_color}; text-align: left; padding: 12px; 
-                                 border-radius: 8px; margin-bottom: 10px; border: none;}}                                
+                                 border-radius: 8px; margin-bottom: 10px; border: none;}}    
+
+               .capabilities {{background-color: {light_background}; border-radius: 10px; padding: 15px;}}
                .capability-card {{background-color: {dark_background}; border-radius: 8px; padding: 10px; margin: 10px;}}              
                .capability-title {{color: {text_color}; background-color: {dark_background}; font-size: 16px; font-weight: 600;}}
                .capability-subtitle {{color: {muted_text}; background-color: {dark_background}; font-size: 14px;}}
                .capability-group {{background-color: {dark_background}; }}
-               .capability-row {{padding: 5px; margin: 5px; }}
+               .capability-row {{padding-right: 10px;  }}
                .capability-column {{  padding: 0 5px; }}
                .capability-column-divider {{ padding: 0 10px }}
+               
                .footer-bar {{background-color: {light_background}; padding: 10px; border-radius: 8px;}}
                .send-button {{background-color: {button_blue}; color: white; border-radius: 8px;}}
                .back-button {{background-color: {button_blue}; color: white; border-radius: 8px; padding: 6px 12px; margin-bottom: 20px;}}
@@ -94,9 +95,8 @@ with gr.Blocks(theme=gr.themes.Base(),
             
             # Right panel - Main content
             with gr.Column(scale=3, elem_classes=["main-panel"]):
+                # Example Questions Section
                 with gr.Row():
-
-                    # Example Questions Section
                     gr.HTML(f"""<div class="section-title">Example Questions</div>""")
 
                 with gr.Group(elem_classes=["example-questions"]):                   
@@ -113,7 +113,7 @@ with gr.Blocks(theme=gr.themes.Base(),
                 gr.HTML(f"""<div class="section-title">Capabilities</div>""")
                             
                 with gr.Group(elem_classes=["capabilities"]):                   
-                    with gr.Row(elem_classes=["capability-row"],):
+                    with gr.Row(elem_classes=["capability-row"]):
                         with gr.Column(scale=1,elem_classes=["capability-column"]):
                             with gr.Group(elem_classes=["capability-card"]):
                                 gr.HTML("""
@@ -131,26 +131,23 @@ with gr.Blocks(theme=gr.themes.Base(),
                                 </div>
                                 """, elem_classes=["capability-group"])
 
-                       
-                        with gr.Column(scale=1):
-                            with gr.Group(elem_classes=["capability-card"]):
-                                gr.HTML("""
-                                <div class="capability-column-divider">
-
+                        with gr.Row(elem_classes=["capability-row"]):   
+                            with gr.Column(scale=1,elem_classes=["capability-column"]):
+                                with gr.Group(elem_classes=["capability-card"]):
+                                    gr.HTML("""
+                                        <div>
+                                            <div class="capability-title">📋 HR Policy & Procedure</div>
+                                            <div class="capability-subtitle">Get instant answers about company policies</div>
+                                        </div>
+                                    """, elem_classes=["capability-group"])
+                                
+                                with gr.Group(elem_classes=["capability-card"]):
+                                    gr.HTML("""
                                     <div>
-                                        <div class="capability-title">📋 HR Policy & Procedure</div>
-                                        <div class="capability-subtitle">Get instant answers about company policies</div>
+                                        <div class="capability-title">💲 Benefits & Compensation</div>
+                                        <div class="capability-subtitle">Learn about your benefits package</div>
                                     </div>
-                                </div>
-                                """, elem_classes=["capability-group"])
-                            
-                            with gr.Group(elem_classes=["capability-card"]):
-                                gr.HTML("""
-                                <div>
-                                    <div class="capability-title">💲 Benefits & Compensation</div>
-                                    <div class="capability-subtitle">Learn about your benefits package</div>
-                                </div>
-                                """,elem_classes=["capability-group"])
+                                    """,elem_classes=["capability-group"])
                 
                 # Input and Chat Area
                 with gr.Row(elem_classes=["footer-bar"]):

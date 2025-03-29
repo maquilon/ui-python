@@ -17,13 +17,14 @@ dark_background = "#111827"
 light_background = "#1f2937"
 lighter_background = "#374151"
 button_blue = "#4C82FB"
+button_white = "#FFFFFF"
+button_orange = "#f86f1a"
 purple_accent = "#9D5CF7"
 card_bg = "#374151"
 text_color = "#FFFFFF"
 muted_text = "#A0A0A0"
 icon_blue = "#4C82FB"
 BLUE_CIRCLE_ICON = '<span style="display: inline-block; width: 18px; height: 18px; border: 2px solid #4C82FB; border-radius: 50%; vertical-align: middle; margin-right: 5px;"></span>'
-
 
 with gr.Blocks(theme=gr.themes.Base(), 
                css=f"""
@@ -32,7 +33,22 @@ with gr.Blocks(theme=gr.themes.Base(),
                .left-panel {{background-color: {light_background}; border-radius: 10px; padding: 10px; margin: 15px;}}
                .example-questions {{background-color: {light_background}; border-radius: 10px; padding: 15px; margin-bottom: 20px; }}
                .full-width-header {{background-color: {light_background}; padding: 15px; width: 100%; display: flex; justify-content: space-between; align-items: center;}}
-               .header {{color: {text_color}; display: flex; align-items: center; font-size: 24px; font-weight: bold;}}
+               .header {{
+                display: flex;
+                align-items: center;
+                font-size: 24px;
+                font-weight: bold;
+                }}
+                .header-text {{
+                background-image: linear-gradient(to right, #4776E6, #8E54E9);
+                background-size: 100%;
+                background-clip: text;
+                -webkit-background-clip: text;
+                -moz-background-clip: text;
+                -webkit-text-fill-color: transparent; 
+                -moz-text-fill-color: transparent;
+                display: inline-block; /* This helps with gradient width */
+                }}
                .header-icons {{display: flex; align-items: center;}}
                .chat-icon {{color: {button_blue}; margin-right: 10px;}}
                .settings-icon {{color: {text_color}; font-size: 24px; cursor: pointer; transition: color 0.3s;}}
@@ -41,7 +57,6 @@ with gr.Blocks(theme=gr.themes.Base(),
                .history-item {{padding: 8px 0; color: {text_color};}}
                .question-button {{background-color: {card_bg}; color: {text_color}; text-align: left; padding: 12px; 
                                  border-radius: 8px; margin-bottom: 10px; border: none;}}    
-
                .capabilities {{background-color: {light_background}; border-radius: 10px; padding: 15px;}}
                .capability-card {{background-color: {dark_background}; border-radius: 8px; padding: 10px; margin: 10px;}}              
                .capability-title {{color: {text_color}; background-color: {dark_background}; font-size: 16px; font-weight: 600;}}
@@ -50,13 +65,12 @@ with gr.Blocks(theme=gr.themes.Base(),
                .capability-row {{padding-right: 10px;  }}
                .capability-column {{  padding: 0 5px; }}
                .capability-column-divider {{ padding: 0 10px }}
-               
-               .footer-bar {{background-color: {light_background}; padding: 10px; border-radius: 8px; margin-top: 30px;}}
-               .send-button {{background-color: {button_blue}; color: white; border-radius: 8px;}}
+               .footer-bar {{background-color: {light_background}; padding: 10px; border-radius: 8px; margin-top: 30px; margin-bottom: 30px;}}
+               .send-button {{background-color: {button_blue}; color: white; border-radius: 8px; margin-top: 10px; font-weight: 200;}}
                .back-button {{background-color: {button_blue}; color: white; border-radius: 8px; padding: 6px 12px; margin-bottom: 20px;}}
                .settings-panel {{background-color: {card_bg}; border-radius: 10px; padding: 20px; margin: 15px;}}
                .settings-container {{background-color: {dark_background}; padding: 20px;}}
-               .settings-btn {{background: none; border: none; color: {text_color}; font-size: 24px; 
+               .settings-btn {{background: none; border: none; color: {text_color}; font-size: 24px; width: 70px; align-self: flex-end; 
                              cursor: pointer; transition: color 0.3s; padding: 0; margin: 0;}}
                .settings-btn:hover {{color: {button_blue};}}
                """) as demo:
@@ -70,7 +84,7 @@ with gr.Blocks(theme=gr.themes.Base(),
         with gr.Row(elem_classes=["full-width-header"]):
             # Create the header with title and settings button
             with gr.Column(scale=4):
-                gr.HTML(f"""<div class="header"><span class="chat-icon">💬</span> GuideWell HR Assistant</div>""")
+                gr.HTML(f"""<div class="header"><span class="chat-icon">💬</span> <span class="header-text">GuideWell HR Assistant</span></div>""")
             
             # Instead of HTML/JS settings icon, use a gradio Button
             with gr.Column(scale=1):
@@ -123,8 +137,6 @@ with gr.Blocks(theme=gr.themes.Base(),
                                     <div class="capability-title">What are the steps for performance review submissions?</div>
                                 </div>
                                 """,elem_classes=["capability-group"])
-
-                
                             
                 # Capabilities Section
                 gr.HTML(f"""<div class="section-title">Capabilities</div>""")
@@ -170,14 +182,14 @@ with gr.Blocks(theme=gr.themes.Base(),
                 # Input and Chat Area
                 # @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
                 with gr.Row(elem_classes=["footer-bar"]):
-                    with gr.Column(scale=20):
+                    with gr.Column(scale=30):
                         user_input = gr.Textbox(
                             placeholder="Ask me anything about HR policies...",
                             show_label=False,
                         )
                     
                     with gr.Column(scale=1):
-                        submit_btn = gr.Button("Send", elem_classes=["send-button"])
+                        submit_btn = gr.Button("SEND", elem_classes=["send-button"])
                 output = gr.Textbox(label="Response", visible=False)
                 
                 # @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@

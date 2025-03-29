@@ -11,39 +11,46 @@ def show_main_page():
     return gr.update(visible=False), gr.update(visible=True)
 
 # Color scheme variables
-dark_bg = "#1A1D25"
-darker_bg = "#151821"
+dark_background = "#111827"
+light_background = "#1f2937"
+lighter_background = "#374151"
 button_blue = "#4C82FB"
 purple_accent = "#9D5CF7"
-card_bg = "#22252F"
+card_bg = "#374151"
 text_color = "#FFFFFF"
 muted_text = "#A0A0A0"
 icon_blue = "#4C82FB"
 
 with gr.Blocks(theme=gr.themes.Base(), 
                css=f"""
-               #container {{background-color: {dark_bg};}}
-               .gradio-container {{background-color: {dark_bg} !important;}}
-               .main-panel {{background-color: {dark_bg};}}
-               .left-panel {{background-color: {darker_bg}; border-radius: 10px; padding: 10px; margin: 15px;}}
-               .example-questions {{background-color: {card_bg}; border-radius: 10px; padding: 15px; margin-bottom: 20px;}}
-               .capabilities {{background-color: {card_bg}; border-radius: 10px; padding: 15px;}}
-               .full-width-header {{background-color: {darker_bg}; padding: 15px; width: 100%; display: flex; justify-content: space-between; align-items: center;}}
+               .container {{background-color: red;}}
+               .gradio-container {{background-color: {dark_background} !important;}}
+               .main-panel {{background-color: {light_background}, padding-right: 15px; margin-right: 15px;}}
+               .left-panel {{background-color: {light_background}; border-radius: 10px; padding: 10px; margin: 15px;}}
+               .example-questions {{background-color: {light_background}; border-radius: 10px; padding: 15px; margin-bottom: 20px; }}
+               .capabilities {{background-color: {light_background}; border-radius: 10px; padding: 15px;}}
+               .full-width-header {{background-color: {light_background}; padding: 15px; width: 100%; display: flex; justify-content: space-between; }}
                .header {{color: {text_color}; display: flex; align-items: center; font-size: 24px; font-weight: bold;}}
+               .header-icons {{display: flex; align-items: center;}}
                .chat-icon {{color: {button_blue}; margin-right: 10px;}}
-               .section-title {{color: {text_color}; font-size: 20px; margin-bottom: 15px;}}
+               .settings-icon {{color: {text_color}; font-size: 24px; cursor: pointer; transition: color 0.3s;}}
+               .settings-icon:hover {{color: {button_blue};}}
+               .section-title {{color: {text_color}; background-color: {light_background}; font-size: 20px; margin-bottom: 15px;}}             
                .history-item {{padding: 8px 0; color: {text_color};}}
                .question-button {{background-color: {card_bg}; color: {text_color}; text-align: left; padding: 12px; 
-                                 border-radius: 8px; margin-bottom: 10px; border: none;}}
-               .capability-card {{background-color: {darker_bg}; border-radius: 8px; padding: 15px; margin-bottom: 10px;}}
-               .capability-title {{color: {text_color}; font-size: 16px; font-weight: 600;}}
-               .capability-subtitle {{color: {muted_text}; font-size: 14px;}}
-               .footer-bar {{background-color: {darker_bg}; padding: 10px; border-radius: 8px;}}
+                                 border-radius: 8px; margin-bottom: 10px; border: none;}}                                
+               .capability-card {{background-color: {dark_background}; border-radius: 8px; padding: 10px; margin: 10px;}}              
+               .capability-title {{color: {text_color}; background-color: {dark_background}; font-size: 16px; font-weight: 600;}}
+               .capability-subtitle {{color: {muted_text}; background-color: {dark_background}; font-size: 14px;}}
+               .capability-group {{background-color: {dark_background}; }}
+               .capability-row {{padding: 5px; margin: 5px; }}
+               .capability-column {{  padding: 0 5px; }}
+               .capability-column-divider {{ padding: 0 10px }}
+               .footer-bar {{background-color: {light_background}; padding: 10px; border-radius: 8px;}}
                .send-button {{background-color: {button_blue}; color: white; border-radius: 8px;}}
-               .settings-button {{background-color: {button_blue}; color: white; border-radius: 8px; padding: 6px 12px; width: 100px;}}
                .back-button {{background-color: {button_blue}; color: white; border-radius: 8px; padding: 6px 12px; margin-bottom: 20px;}}
                .settings-panel {{background-color: {card_bg}; border-radius: 10px; padding: 20px; margin: 15px;}}
-               .settings-container {{background-color: {dark_bg}; padding: 20px;}}
+               .settings-container {{background-color: {dark_background}; padding: 20px;}}
                """) as demo:
     
     # Create two pages: main app and settings
@@ -52,10 +59,28 @@ with gr.Blocks(theme=gr.themes.Base(),
     
     # Main application
     with main_app:
-        # Full-width header with added settings button
+        # Full-width header with added settings icon
         with gr.Row(elem_classes=["full-width-header"]):
             gr.HTML(f"""<div class="header"><span class="chat-icon">💬</span> GuideWell HR Assistant</div>""")
-            settings_btn = gr.Button("Settings", elem_classes=["settings-button"])
+            # Create a clickable button that looks like an icon
+            settings_btn = gr.Button("⚙️", elem_id="settings-icon")
+            
+            # Style the button to look like an icon
+            gr.HTML("""
+            <style>
+            #settings-icon {
+                background: none;
+                border: none;
+                font-size: 24px;
+                padding: 0;
+                cursor: pointer;
+                box-shadow: none;
+            }
+            #settings-icon:hover {
+                color: #4C82FB;
+            }
+            </style>
+            """)
         
         with gr.Row(elem_id="container"):
             # Left panel - Chat History
@@ -69,11 +94,12 @@ with gr.Blocks(theme=gr.themes.Base(),
             
             # Right panel - Main content
             with gr.Column(scale=3, elem_classes=["main-panel"]):
-                
-                # Example Questions Section
-                with gr.Group(elem_classes=["example-questions"]):
-                    gr.HTML("""<div class="section-title">📌 Example Questions</div>""")
-                    
+                with gr.Row():
+
+                    # Example Questions Section
+                    gr.HTML(f"""<div class="section-title">Example Questions</div>""")
+
+                with gr.Group(elem_classes=["example-questions"]):                   
                     with gr.Row():
                         with gr.Column(scale=1):
                             gr.Button("What is the policy for requesting paid time off?", elem_classes=["question-button"])
@@ -84,18 +110,18 @@ with gr.Blocks(theme=gr.themes.Base(),
                             gr.Button("What are the steps for performance review submissions?", elem_classes=["question-button"])
                 
                 # Capabilities Section
-                with gr.Group(elem_classes=["capabilities"]):
-                    gr.HTML("""<div class="section-title">Capabilities</div>""")
-                    
-                    with gr.Row():
-                        with gr.Column(scale=1):
+                gr.HTML(f"""<div class="section-title">Capabilities</div>""")
+                            
+                with gr.Group(elem_classes=["capabilities"]):                   
+                    with gr.Row(elem_classes=["capability-row"],):
+                        with gr.Column(scale=1,elem_classes=["capability-column"]):
                             with gr.Group(elem_classes=["capability-card"]):
                                 gr.HTML("""
                                 <div>
                                     <div class="capability-title">👥 Employee Self-Service</div>
                                     <div class="capability-subtitle">Manage your HR tasks efficiently</div>
                                 </div>
-                                """)
+                                """, elem_classes=["capability-group"])
                             
                             with gr.Group(elem_classes=["capability-card"]):
                                 gr.HTML("""
@@ -103,16 +129,20 @@ with gr.Blocks(theme=gr.themes.Base(),
                                     <div class="capability-title">🛡️ Security & Compliance</div>
                                     <div class="capability-subtitle">Stay informed about compliance requirements</div>
                                 </div>
-                                """)
-                        
+                                """, elem_classes=["capability-group"])
+
+                       
                         with gr.Column(scale=1):
                             with gr.Group(elem_classes=["capability-card"]):
                                 gr.HTML("""
-                                <div>
-                                    <div class="capability-title">📋 HR Policy & Procedure</div>
-                                    <div class="capability-subtitle">Get instant answers about company policies</div>
+                                <div class="capability-column-divider">
+
+                                    <div>
+                                        <div class="capability-title">📋 HR Policy & Procedure</div>
+                                        <div class="capability-subtitle">Get instant answers about company policies</div>
+                                    </div>
                                 </div>
-                                """)
+                                """, elem_classes=["capability-group"])
                             
                             with gr.Group(elem_classes=["capability-card"]):
                                 gr.HTML("""
@@ -120,7 +150,7 @@ with gr.Blocks(theme=gr.themes.Base(),
                                     <div class="capability-title">💲 Benefits & Compensation</div>
                                     <div class="capability-subtitle">Learn about your benefits package</div>
                                 </div>
-                                """)
+                                """,elem_classes=["capability-group"])
                 
                 # Input and Chat Area
                 with gr.Row(elem_classes=["footer-bar"]):

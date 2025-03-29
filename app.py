@@ -17,15 +17,14 @@ dark_background = "#111827"
 light_background = "#1f2937"
 lighter_background = "#374151"
 button_blue = "#4C82FB"
-button_white = "#FFFFFF"
-button_orange = "#f86f1a"
 button_green = "#007b86"
 purple_accent = "#9D5CF7"
 card_bg = "#374151"
 text_color = "#FFFFFF"
 muted_text = "#A0A0A0"
 icon_blue = "#4C82FB"
-BLUE_CIRCLE_ICON = '<span style="display: inline-block; width: 18px; height: 18px; border: 2px solid #4C82FB; border-radius: 50%; vertical-align: middle; margin-right: 5px;"></span>'
+
+BLUE_CIRCLE_ICON = '<span style="display: inline-block; width: 18px; height: 18px; border: 2px solid #007b86; border-radius: 50%; vertical-align: middle; margin-right: 5px;"></span>'
 
 with gr.Blocks(theme=gr.themes.Base(), 
                css=f"""
@@ -37,6 +36,8 @@ with gr.Blocks(theme=gr.themes.Base(),
                .header {{
                 display: flex;
                 align-items: center;
+                justify-content: center;
+                text-align: center;
                 font-size: 24px;
                 font-weight: bold;
                 }}
@@ -68,7 +69,7 @@ with gr.Blocks(theme=gr.themes.Base(),
                .capability-column-divider {{ padding: 0 10px }}
                .footer-bar {{background-color: {light_background}; padding: 10px; border-radius: 8px; margin-top: 30px; margin-bottom: 30px;}}
                .send-button {{background-color: {button_green}; color: white; border-radius: 8px; margin-top: 10px; font-weight: 200;}}
-               .back-button {{background-color: {button_blue}; color: white; border-radius: 8px; padding: 6px 12px; margin-bottom: 20px;}}
+               .back-button {{background-color: {button_green}; color: white; border-radius: 8px; padding: 6px 12px; margin-bottom: 20px; max-width: 30px;}}
                .settings-panel {{background-color: {card_bg}; border-radius: 10px; padding: 20px; margin: 15px;}}
                .settings-container {{background-color: {dark_background}; padding: 20px;}}
                .settings-btn {{background: none; border: none; color: {text_color}; font-size: 24px; width: 70px; align-self: flex-end; 
@@ -206,12 +207,16 @@ with gr.Blocks(theme=gr.themes.Base(),
     with settings_page:
         with gr.Row(elem_classes=["full-width-header"]):
             back_btn = gr.Button("← Back", elem_classes=["back-button"])
+
             gr.HTML(f"""<div class="header">Settings</div>""")
         
+
+
         with gr.Column(elem_classes=["settings-container"]):
             with gr.Group(elem_classes=["settings-panel"]):
-                gr.HTML("""<div class="section-title">Settings</div>""")
-                gr.HTML("""<div>Settings content will go here</div>""")
+                gr.HTML("""<div>Please upload the latest version of the Human Resources policies and procedures.</div>""")
+                gr.File(label="Upload File")
+
     
     # Set up navigation between pages using the actual buttons
     settings_btn.click(show_settings_page, inputs=[], outputs=[settings_page, main_app])

@@ -35,21 +35,25 @@ with gr.Blocks(theme=gr.themes.Base(),
                .full-width-header {{background-color: {light_background}; padding: 15px; width: 100%; display: flex; justify-content: space-between; align-items: center;}}
                .header {{
                 display: flex;
-                align-items: center;
-                justify-content: center;
-                text-align: center;
                 font-size: 24px;
                 font-weight: bold;
                 }}
+                .header-settings {{
+                    align-items: center;
+                    text-align: center;
+                    font-size: 24px;
+                    font-weight: bold;
+                    padding-right: 100px;
+                }}
                 .header-text {{
-                background-image: linear-gradient(to right, #007b86, #ffffff);
-                background-size: 100%;
-                background-clip: text;
-                -webkit-background-clip: text;
-                -moz-background-clip: text;
-                -webkit-text-fill-color: transparent; 
-                -moz-text-fill-color: transparent;
-                display: inline-block; /* This helps with gradient width */
+                    background-image: linear-gradient(to right, #007b86, #ffffff);
+                    background-size: 100%;
+                    background-clip: text;
+                    -webkit-background-clip: text;
+                    -moz-background-clip: text;
+                    -webkit-text-fill-color: transparent; 
+                    -moz-text-fill-color: transparent;
+                    display: inline-block; 
                 }}
                .header-icons {{display: flex; align-items: center;}}
                .chat-icon {{color: {button_blue}; margin-right: 10px;}}
@@ -208,7 +212,7 @@ with gr.Blocks(theme=gr.themes.Base(),
         with gr.Row(elem_classes=["full-width-header"]):
             back_btn = gr.Button("← Back", elem_classes=["back-button"])
 
-            gr.HTML(f"""<div class="header">Settings</div>""")
+            gr.HTML(f"""<div class="header-settings">Settings</div>""")
         
 
 

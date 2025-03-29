@@ -19,6 +19,7 @@ lighter_background = "#374151"
 button_blue = "#4C82FB"
 button_white = "#FFFFFF"
 button_orange = "#f86f1a"
+button_green = "#007b86"
 purple_accent = "#9D5CF7"
 card_bg = "#374151"
 text_color = "#FFFFFF"
@@ -40,7 +41,7 @@ with gr.Blocks(theme=gr.themes.Base(),
                 font-weight: bold;
                 }}
                 .header-text {{
-                background-image: linear-gradient(to right, #4776E6, #8E54E9);
+                background-image: linear-gradient(to right, #007b86, #ffffff);
                 background-size: 100%;
                 background-clip: text;
                 -webkit-background-clip: text;
@@ -66,7 +67,7 @@ with gr.Blocks(theme=gr.themes.Base(),
                .capability-column {{  padding: 0 5px; }}
                .capability-column-divider {{ padding: 0 10px }}
                .footer-bar {{background-color: {light_background}; padding: 10px; border-radius: 8px; margin-top: 30px; margin-bottom: 30px;}}
-               .send-button {{background-color: {button_blue}; color: white; border-radius: 8px; margin-top: 10px; font-weight: 200;}}
+               .send-button {{background-color: {button_green}; color: white; border-radius: 8px; margin-top: 10px; font-weight: 200;}}
                .back-button {{background-color: {button_blue}; color: white; border-radius: 8px; padding: 6px 12px; margin-bottom: 20px;}}
                .settings-panel {{background-color: {card_bg}; border-radius: 10px; padding: 20px; margin: 15px;}}
                .settings-container {{background-color: {dark_background}; padding: 20px;}}

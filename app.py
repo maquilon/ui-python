@@ -1,11 +1,10 @@
 import gradio as gr
 
 def question(user_question):
-    # @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-    # This function would handle the actual HR assistant functionality
-    # @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
+    """Handle the HR assistant functionality and store question in JavaScript"""
     print(f"User asked: {user_question}")
+    # Return the response, we don't need to update the history HTML here
+    # since it's handled by the JavaScript
     return "This is where the HR assistant response would appear."
 
 def show_settings_page():
@@ -81,6 +80,69 @@ with gr.Blocks(theme=gr.themes.Base(),
     .settings-btn {{background: none; border: none; color: {text_color}; font-size: 24px; width: 70px; align-self: flex-end; 
                     cursor: pointer; transition: color 0.3s; padding: 0; margin: 0;}}
     .settings-btn:hover {{color: {button_blue};}}
+    """,
+    head="""
+    <script>
+    // Function to update chat history that will be called when needed
+    function populateChatHistory() {
+        // Try to get questions from localStorage
+        let questions = [];
+        try {
+            const storedQuestions = localStorage.getItem('userQuestions');
+            if (storedQuestions) {
+                questions = JSON.parse(storedQuestions);
+            }
+        } catch (e) {
+            console.error('Error loading questions from localStorage:', e);
+        }
+        
+        // Find the history container
+        const historyContainer = document.getElementById('chat-history-items');
+        if (!historyContainer) {
+            console.error('Chat history container not found');
+            return;
+        }
+        
+        // Generate HTML for the questions
+        let historyHTML = '';
+        if (!questions || questions.length === 0) {
+            historyHTML = '<div class="history-item">No previous questions</div>';
+        } else {
+            // Get the most recent questions first
+            const recentQuestions = questions.slice(-10).reverse();
+            
+            for (const question of recentQuestions) {
+                // Escape HTML to prevent XSS
+                const escapedQuestion = String(question)
+                    .replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .replace(/"/g, '&quot;')
+                    .replace(/'/g, '&#039;');
+                
+                historyHTML += `<div class="history-item">${escapedQuestion}</div>`;
+            }
+        }
+        
+        // Update the container
+        historyContainer.innerHTML = historyHTML;
+    }
+    
+    // Set up the event listener for when the DOM is fully loaded
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initial population of chat history
+        setTimeout(populateChatHistory, 500);
+        
+        // Add submit event listener to populate chat history after submission
+        const sendButton = document.querySelector('.send-button');
+        if (sendButton) {
+            sendButton.addEventListener('click', function() {
+                // Wait a bit for the localStorage to be updated
+                setTimeout(populateChatHistory, 500);
+            });
+        }
+    });
+    </script>
     """) as demo:
     
     #  Two pages: main app and settings
@@ -105,8 +167,23 @@ with gr.Blocks(theme=gr.themes.Base(),
                     gr.HTML(f"""<div class="section-title">Chat History</div>""")
                 
                 with gr.Column():
-                    gr.HTML("""<div class="history-item">Previous question 1</div>""")
-                    gr.HTML("""<div class="history-item">Previous question 2</div>""")
+                    # Here we just create a simple container for our JavaScript to target
+                    gr.HTML("""
+                    <div id="chat-history-items">
+                        <div class="history-item">Loading chat history...</div>
+                    </div>
+                    
+                    <script>
+                    // Try to load chat history right away
+                    (function() {
+                        setTimeout(function() {
+                            if (window.populateChatHistory) {
+                                window.populateChatHistory();
+                            }
+                        }, 100);
+                    })();
+                    </script>
+                    """)
             
             # Right panel - Main content
             with gr.Column(scale=3, elem_classes=["main-panel"]):
@@ -118,33 +195,29 @@ with gr.Blocks(theme=gr.themes.Base(),
                     with gr.Row(elem_classes=["capability-row"]):
                         with gr.Column(scale=1,elem_classes=["capability-column"]):
                             with gr.Group(elem_classes=["capability-card"]):
-                                gr.HTML("""
-                                <div>
-                                    <div class="capability-title">What is the policy for requesting paid time off?</div>
-                                </div>
-                                """, elem_classes=["capability-group"])
+                                example_1 = gr.Button(
+                                    "What is the policy for requesting paid time off?", 
+                                    elem_classes=["question-button"]
+                                )
                             
                             with gr.Group(elem_classes=["capability-card"]):
-                                gr.HTML("""
-                                <div>
-                                    <div class="capability-title">How do I update my direct deposit information?</div>
-                                </div>
-                                """, elem_classes=["capability-group"])
+                                example_2 = gr.Button(
+                                    "How do I update my direct deposit information?", 
+                                    elem_classes=["question-button"]
+                                )
 
                         with gr.Column(scale=1,elem_classes=["capability-column"]):
                             with gr.Group(elem_classes=["capability-card"]):
-                                gr.HTML("""
-                                    <div>
-                                        <div class="capability-title">Explain the jury duty and court appearances policy?</div>
-                                    </div>
-                                """, elem_classes=["capability-group"])
+                                example_3 = gr.Button(
+                                    "Explain the jury duty and court appearances policy?", 
+                                    elem_classes=["question-button"]
+                                )
                             
                             with gr.Group(elem_classes=["capability-card"]):
-                                gr.HTML("""
-                                <div>
-                                    <div class="capability-title">What are the steps for performance review submissions?</div>
-                                </div>
-                                """,elem_classes=["capability-group"])
+                                example_4 = gr.Button(
+                                    "What are the steps for performance review submissions?", 
+                                    elem_classes=["question-button"]
+                                )
                             
                 # Capabilities Section
                 gr.HTML(f"""<div class="section-title">Capabilities</div>""")
@@ -186,9 +259,7 @@ with gr.Blocks(theme=gr.themes.Base(),
                                 </div>
                                 """,elem_classes=["capability-group"])
 
-                # @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
                 # Input and Chat Area
-                # @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
                 with gr.Row(elem_classes=["footer-bar"]):
                     with gr.Column(scale=30):
                         user_input = gr.Textbox(
@@ -200,26 +271,57 @@ with gr.Blocks(theme=gr.themes.Base(),
                         submit_btn = gr.Button("SEND", elem_classes=["send-button"])
                 output = gr.Textbox(label="Response", visible=False)
                 
-                # @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-                # Connect the AI to the user inputs
-                # @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+                # Connect the AI to the user inputs with localStorage saving
                 submit_btn.click(
                     question, 
                     inputs=[user_input], 
-                    outputs=[output],   
+                    outputs=[output],
                     js="""
-                    (user_question) => {
-                        let questions = JSON.parse(localStorage.getItem('userQuestions')) || [];
-                        questions.push(user_question);
-                        localStorage.setItem('userQuestions', JSON.stringify(questions));
+                    function(user_question) {
+                        try {
+                            // Get existing questions from localStorage
+                            let questions = [];
+                            try {
+                                const storedQuestions = localStorage.getItem('userQuestions');
+                                if (storedQuestions) {
+                                    questions = JSON.parse(storedQuestions);
+                                }
+                            } catch (e) {
+                                console.error('Error parsing questions:', e);
+                                questions = [];
+                            }
+                            
+                            // Add the new question
+                            if (user_question && user_question.trim() !== '') {
+                                questions.push(user_question);
+                                
+                                // Save back to localStorage
+                                localStorage.setItem('userQuestions', JSON.stringify(questions));
+                                console.log('Saved question to localStorage:', user_question);
+                                
+                                // Manually call our populate function
+                                setTimeout(function() {
+                                    if (window.populateChatHistory) {
+                                        window.populateChatHistory();
+                                    }
+                                }, 100);
+                            }
+                        } catch (e) {
+                            console.error('Error saving to localStorage:', e);
+                        }
+                        
                         return user_question;
                     }
                     """
                 )
-
-
-
-
+                
+                # Connect example questions to input field
+                for example in [example_1, example_2, example_3, example_4]:
+                    example.click(
+                        fn=lambda text: text,
+                        inputs=[example],
+                        outputs=[user_input]
+                    )
 
     # @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
     # Settings page
@@ -234,6 +336,27 @@ with gr.Blocks(theme=gr.themes.Base(),
             with gr.Group(elem_classes=["settings-panel"]):
                 gr.HTML("""<div>Please upload the latest version of the Human Resources policies and procedures.</div>""")
                 gr.File(label="Upload File")
+                
+                # Add a button to clear chat history
+                clear_history_btn = gr.Button("Clear Chat History", variant="secondary")
+                
+                # Add JS to clear localStorage when the button is clicked
+                clear_history_btn.click(
+                    fn=lambda: None,
+                    inputs=[],
+                    outputs=[],
+                    js="""
+                    () => {
+                        localStorage.removeItem('userQuestions');
+                        alert('Chat history cleared');
+                        
+                        // Update the display
+                        if (window.populateChatHistory) {
+                            window.populateChatHistory();
+                        }
+                    }
+                    """
+                )
     
     # Set up navigation between pages using the actual buttons
     settings_btn.click(show_settings_page, inputs=[], outputs=[settings_page, main_app])

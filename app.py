@@ -195,15 +195,29 @@ with gr.Blocks(theme=gr.themes.Base(),
                             placeholder="Ask me anything about HR policies...",
                             show_label=False,
                         )
-                    
+                            
                     with gr.Column(scale=1):
                         submit_btn = gr.Button("SEND", elem_classes=["send-button"])
                 output = gr.Textbox(label="Response", visible=False)
                 
                 # @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-                # Connect the components
+                # Connect the AI to the user inputs
                 # @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-                submit_btn.click(question, inputs=[user_input], outputs=[output])
+                submit_btn.click(
+                    question, 
+                    inputs=[user_input], 
+                    outputs=[output],   
+                    js="""
+                    (user_question) => {
+                        let questions = JSON.parse(localStorage.getItem('userQuestions')) || [];
+                        questions.push(user_question);
+                        localStorage.setItem('userQuestions', JSON.stringify(questions));
+                        return user_question;
+                    }
+                    """
+                )
+
+
 
 
 

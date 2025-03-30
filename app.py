@@ -24,7 +24,7 @@ text_color = "#FFFFFF"
 muted_text = "#A0A0A0"
 icon_blue = "#4C82FB"
 
-BLUE_CIRCLE_ICON = '<span style="display: inline-block; width: 18px; height: 18px; border: 2px solid #007b86; border-radius: 50%; vertical-align: middle; margin-right: 5px;"></span>'
+BLUE_CIRCLE_ICON = '<span style="display: inline-block; width: 18px; height: 18px; border: 5px solid #007b86; border-radius: 50%; vertical-align: middle; margin-right: 5px;"></span>'
 
 with gr.Blocks(theme=gr.themes.Base(), 
     css=f"""

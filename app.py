@@ -1,9 +1,11 @@
 import gradio as gr
 
-def dummy_function(*args):
+def question(user_question):
     # @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
     # This function would handle the actual HR assistant functionality
     # @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+    print(f"User asked: {user_question}")
     return "This is where the HR assistant response would appear."
 
 def show_settings_page():
@@ -201,8 +203,8 @@ with gr.Blocks(theme=gr.themes.Base(),
                 # @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
                 # Connect the components
                 # @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-                submit_btn.click(dummy_function, inputs=[user_input], outputs=[output])
-                user_input.submit(dummy_function, inputs=[user_input], outputs=[output])
+                submit_btn.click(question, inputs=[user_input], outputs=[output])
+
 
 
     # @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@

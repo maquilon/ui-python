@@ -1,10 +1,11 @@
 import gradio as gr
 
 def question(user_question):
-    """Handle the HR assistant functionality and store question in JavaScript"""
+    # @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+    # Handle the HR assistant functionality and store question in JavaScript
+    # @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
     print(f"User asked: {user_question}")
-    # Return the response, we don't need to update the history HTML here
-    # since it's handled by the JavaScript
+
     return "This is where the HR assistant response would appear."
 
 def show_settings_page():
@@ -83,65 +84,65 @@ with gr.Blocks(theme=gr.themes.Base(),
     """,
     head="""
     <script>
-    // Function to update chat history that will be called when needed
-    function populateChatHistory() {
-        // Try to get questions from localStorage
-        let questions = [];
-        try {
-            const storedQuestions = localStorage.getItem('userQuestions');
-            if (storedQuestions) {
-                questions = JSON.parse(storedQuestions);
+        // Function to update chat history that will be called when needed
+        function populateChatHistory() {
+            // Try to get questions from localStorage
+            let questions = [];
+            try {
+                const storedQuestions = localStorage.getItem('userQuestions');
+                if (storedQuestions) {
+                    questions = JSON.parse(storedQuestions);
+                }
+            } catch (e) {
+                console.error('Error loading questions from localStorage:', e);
             }
-        } catch (e) {
-            console.error('Error loading questions from localStorage:', e);
-        }
-        
-        // Find the history container
-        const historyContainer = document.getElementById('chat-history-items');
-        if (!historyContainer) {
-            console.error('Chat history container not found');
-            return;
-        }
-        
-        // Generate HTML for the questions
-        let historyHTML = '';
-        if (!questions || questions.length === 0) {
-            historyHTML = '<div class="history-item">No previous questions</div>';
-        } else {
-            // Get the most recent questions first
-            const recentQuestions = questions.slice(-10).reverse();
             
-            for (const question of recentQuestions) {
-                // Escape HTML to prevent XSS
-                const escapedQuestion = String(question)
-                    .replace(/&/g, '&amp;')
-                    .replace(/</g, '&lt;')
-                    .replace(/>/g, '&gt;')
-                    .replace(/"/g, '&quot;')
-                    .replace(/'/g, '&#039;');
-                
-                historyHTML += `<div class="history-item">${escapedQuestion}</div>`;
+            // Find the history container
+            const historyContainer = document.getElementById('chat-history-items');
+            if (!historyContainer) {
+                console.error('Chat history container not found');
+                return;
             }
+            
+            // Generate HTML for the questions
+            let historyHTML = '';
+            if (!questions || questions.length === 0) {
+                historyHTML = '<div class="history-item">No previous questions</div>';
+            } else {
+                // Get the most recent questions first
+                const recentQuestions = questions.slice(-10).reverse();
+                
+                for (const question of recentQuestions) {
+                    // Escape HTML to prevent XSS
+                    const escapedQuestion = String(question)
+                        .replace(/&/g, '&amp;')
+                        .replace(/</g, '&lt;')
+                        .replace(/>/g, '&gt;')
+                        .replace(/"/g, '&quot;')
+                        .replace(/'/g, '&#039;');
+                    
+                    historyHTML += `<div class="history-item">${escapedQuestion}</div>`;
+                }
+            }
+            
+            // Update the container
+            historyContainer.innerHTML = historyHTML;
         }
         
-        // Update the container
-        historyContainer.innerHTML = historyHTML;
-    }
-    
-    // Set up the event listener for when the DOM is fully loaded
-    document.addEventListener('DOMContentLoaded', function() {
-        // Initial population of chat history
-        setTimeout(populateChatHistory, 500);
-        
-        // Add submit event listener to populate chat history after submission
-        const sendButton = document.querySelector('.send-button');
-        if (sendButton) {
-            sendButton.addEventListener('click', function() {
-                // Wait a bit for the localStorage to be updated
-                setTimeout(populateChatHistory, 500);
-            });
-        }
-    });
+        // Set up the event listener for when the DOM is fully loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initial population of chat history
+            populateChatHistory();
+            
+            // Add submit event listener to populate chat history after submission
+            const sendButton = document.querySelector('.send-button');
+            if (sendButton) {
+                sendButton.addEventListener('click', function() {
+                    // Wait a bit for the localStorage to be updated
+                    setTimeout(populateChatHistory, 500);
+                });
+            }
+        });
     </script>
     """) as demo:
     
@@ -269,7 +270,7 @@ with gr.Blocks(theme=gr.themes.Base(),
                             
                     with gr.Column(scale=1):
                         submit_btn = gr.Button("SEND", elem_classes=["send-button"])
-                output = gr.Textbox(label="Response", visible=False)
+                output = gr.Textbox(label="Response", show_label=True, visible=True)
                 
                 # Connect the AI to the user inputs with localStorage saving
                 submit_btn.click(

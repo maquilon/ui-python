@@ -73,6 +73,7 @@ with gr.Blocks(theme=gr.themes.Base(),
     .capability-row {{padding-right: 10px;  }}
     .capability-column {{  padding: 0 5px; }}
     .capability-column-divider {{ padding: 0 10px }}
+    .clear-history-btn {{ margin-top: 10px; }}
     .footer-bar {{background-color: {light_background}; padding: 10px; border-radius: 8px; margin-top: 30px; margin-bottom: 30px;}}
     .send-button {{background-color: {button_green}; color: white; border-radius: 8px; margin-top: 10px; font-weight: 200;}}
     .back-button {{background-color: {button_green}; color: white; border-radius: 8px; padding: 6px 12px; margin-bottom: 20px; max-width: 30px;}}
@@ -335,11 +336,14 @@ with gr.Blocks(theme=gr.themes.Base(),
       
         with gr.Column(elem_classes=["settings-container"]):
             with gr.Group(elem_classes=["settings-panel"]):
+                                # Add a button to clear chat history
+                clear_history_btn = gr.Button("Clear Chat History", variant="secondary", elem_classes=["clear-history-btn"])
+                
+            with gr.Group(elem_classes=["settings-panel"]):
                 gr.HTML("""<div>Please upload the latest version of the Human Resources policies and procedures.</div>""")
                 gr.File(label="Upload File")
                 
-                # Add a button to clear chat history
-                clear_history_btn = gr.Button("Clear Chat History", variant="secondary")
+
                 
                 # Add JS to clear localStorage when the button is clicked
                 clear_history_btn.click(

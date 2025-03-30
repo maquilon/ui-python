@@ -62,8 +62,8 @@ with gr.Blocks(theme=gr.themes.Base(),
     .settings-icon:hover {{color: {button_blue};}}
     .section-title {{color: {text_color}; background-color: {dark_background}; padding: 10px; margin: 10px; font-size: 20px; margin-bottom: 15px;}}             
     .history-item {{padding: 8px 0; color: {text_color};}}
-    .question-button {{background-color: {card_bg}; color: {text_color}; text-align: left; padding: 12px; 
-                        border-radius: 8px; margin-bottom: 10px; border: none;}}    
+    .question-button {{background-color: {dark_background}; color: {text_color}; text-align: left; padding: 12px; 
+                        border-radius: 8px; margin-bottom: 0px; border: none;}}    
     .capabilities {{background-color: {light_background}; border-radius: 10px; padding: 15px;}}
     .capability-card {{background-color: {dark_background}; border-radius: 8px; padding: 10px; margin: 10px;}}              
     .capability-title {{color: {text_color}; background-color: {dark_background}; font-size: 16px; font-weight: 600;}}
